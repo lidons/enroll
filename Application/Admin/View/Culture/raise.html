@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="renderer" content="webkit">
+<title>提高班</title>  
+<link rel="stylesheet" href="__PUBLIC__/admin/css/pintuer.css">
+<link rel="stylesheet" href="__PUBLIC__/admin/css/admin.css">
+<script src="__PUBLIC__/admin/js/jquery.js"></script>
+<script src="__PUBLIC__/admin/js/pintuer.js"></script>  
+</head>
+<body>
+<div class="panel admin-panel">
+  <div class="panel-head"><strong class="icon-reorder">提高班报名</strong></div>
+  <div class="padding border-bottom" style="text-align:center"> 
+  </div> 
+ <form action="{:U('Admin/Culture/del')}" method="get">
+        <div class="padding border-bottom">
+      <ul class="search">
+        <li>
+          <button type="button"  class="button border-green" id="checkall"><span class="icon-check"></span> 全选</button>
+          <button type="submit" class="button border-red"><span class="icon-trash-o"></span> 批量删除</button>
+        </li>
+      </ul>
+    </div>
+  	<table class="table table-hover text-center">
+    <tr> 
+    <thead>
+   	<th width="7%">ID</th>
+      <th>报名时间</th>
+      <th>名字</th>
+      <th>家长名字</th>
+      <th>年龄</th>
+      <th>到校时间</th> 
+	  <th>操作</th>
+    </thead>
+    </tr>
+	<volist name="culture" id="vo">
+    <tr>
+     <tbody>
+      <td><input type="checkbox" name="id[]"  id="checkbox" value="{$vo.id}"></td>
+      <td style="width:15%">{$vo.createtime}</td>  
+      <td style="width:15%">{$vo.name}</td>
+      <td style="width:15%">{$vo.parent}</td>
+      <td style="width:15%">{$vo.age}</td>
+      <td style="width:15%">{$vo.come_class}</td> 
+      <td>
+      <div class="button-group">
+      <!--  <a type="button" class="button border-main" href="{:U('Admin/Quality/save_pz_article',array('id'=>$vo['id']))}"><span class="icon-edit"></span>修改</a>
+	  -->
+     <if condition="$vo.status eq 1"> <a type="button" href="{:U('Admin/Culture/modify_state',array('id'=>$vo['id'],'groups'=>$vo['groups']))}" onclick="return isstatus();" class="button border-main">待处理</a>
+        <else /><a type="button"  href="{:U('Admin/Culture/modify_status',array('id'=>$vo['id'],'groups'=>$vo['groups']))}"  class="button border-green" >已处理</a>
+	 </if>
+      <a class="button border-red" href="{:U('Admin/culture/del_pz_article',array('id'=>$vo['id']))}" onclick="return isdel();"    ><span class="icon-trash-o"></span> 删除</a>
+      </div>
+      </td>
+      </tbody>
+    </tr> 
+	</volist>
+	<tr>
+        <td colspan="8"><div class="pagelist">{$page}</div></td>
+    </tr>
+  </table>
+  
+</div>
+<div style="text-align: center;font-size:18px;">{$page}</div>
+<script>
+    function isdel(){
+	if (confirm('确定要删除吗')){
+     return true;
+     }else{
+     return false;
+     }
+	
+	}
+    function isstatus(){
+    	if(confirm('确定处理完了么？')){
+    		return true;
+    	}else{
+    		return false;
+    	}
+    }
+
+
+	function isshow(obj,obj1){
+		 $.post("{:U('Admin/Weixin/isshow')}",{status:obj,id:obj1},function(data){
+			  if(data==1){
+				alert ('状态修改成功');
+				location.reload();
+				}else if(data==0){
+				alert ('状态修改失败');
+				location.reload();
+				}
+		 })
+		 
+		 }
+	$("#checkall").click(function(){ 
+		  $("input[name='id[]']").each(function(){
+			  if (this.checked) {
+				  this.checked = false;
+			  }
+			  else {
+				  this.checked = true;
+			  }
+		  });
+		})
+
+</script>
+</body></html>

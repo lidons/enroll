@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="renderer" content="webkit">
+    <title>预约场馆列表</title>  
+    <link rel="stylesheet" href="__PUBLIC__/admin/css/pintuer.css">
+    <link rel="stylesheet" href="__PUBLIC__/admin/css/admin.css">
+    <script src="__PUBLIC__/admin/js/jquery.js"></script>
+    <script src="__PUBLIC__/admin/js/pintuer.js"></script>  
+</head>
+<body>
+<div class="panel admin-panel">
+  <div class="panel-head"><strong class="icon-reorder">场馆预约列表</strong></div>
+  
+  <div class="padding border-bottom" style="text-align:center"> 
+ 
+  </div> 
+   <form action="{:U('Admin/Venue/del_to')}" method="get">
+    <div class="padding border-bottom">
+      <ul class="search">
+        <li>
+          <button type="button"  class="button border-green" id="checkall"><span class="icon-check"></span> 全选</button>
+          <button type="submit" class="button border-red"><span class="icon-trash-o"></span> 批量删除</button>
+        </li>
+      </ul>
+    </div>
+  <table class="table table-hover text-center">
+    <tr> 
+      <th width="7%">ID</th>
+      <th>预约时间</th>
+      <th>姓名</th> 
+      <th>电话</th>
+      <th>预约教练</th>
+	  <th>起始时间</th>
+	  <th>操作</th>
+    </tr>
+	<volist name="venue" id="vo">
+    <tr>
+      <td><input type="checkbox" name="id[]"  id="checkbox" value="{$vo.id}"></td>
+      <td style="width:15%">{$vo.createtime}</td>  
+      <td style="width:10%"><span >{$vo.name}</span></td>  
+      <td style="width:10%"><span style="font-weight:bold;">{$vo.phone}</span></td> 
+      <td style="width:10%">{$vo.coaches}</td>
+	  <td style="width:25%"><span style="font-weight:bold;">{$vo.starttime}</span><br/><span style="font-weight:bold;">{$vo.endtime}</span></td>	
+      <td>
+      <div class="button-group">
+     <if condition="$vo.botton eq 1"> <a type="button" href="{:U('Admin/Venue/modify_state',array('id'=>$vo['id']))}"  onclick="return isstatus();" class="button border-main">待处理</a>
+        <else /><a type="button"  href="{:U('Admin/Venue/getStatusTo',array('id'=>$vo['id']))}"  class="button border-green" >已处理</a>
+	 </if>
+ 	 <a class="button border-red" href="{:U('Admin/Venue/del_pz_article',array('id'=>$vo['id']))}" onclick="return isdel();"><span class="icon-trash-o"></span> 删除</a>
+      </div>
+      </td>
+    </tr> 
+	</volist>
+  </table>
+ </form>
+</div>
+<div style="text-align: center;font-size:16px;">{$page}</div>
+<script>
+function isdel(){
+	if (confirm('确定要删除吗')){
+     return true;
+     }else{
+     return false;
+     }
+	}
+function isstatus(){
+	if(confirm('确定处理完了么？')){
+		return true;
+	}else{
+		return false;
+	}
+}
+$("#checkall").click(function(){ 
+	  $("input[name='id[]']").each(function(){
+		  if (this.checked) {
+			  this.checked = false;
+		  }
+		  else {
+			  this.checked = true;
+		  }
+	  });
+	})
+
+
+</script>
+</body></html>
